@@ -1,9 +1,14 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import Movie from "./Movie";
+import { MOVIE } from "../../../interfaces";
 
-function MovieList({ movies }) {
+interface Iprops {
+  movies: MOVIE[]
+}
+
+function MovieList({ movies }:Iprops) {
+
+
   const [isOpen1, setIsOpen1] = useState(true);
 
   return (

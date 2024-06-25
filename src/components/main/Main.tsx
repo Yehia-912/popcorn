@@ -1,8 +1,12 @@
-/* eslint-disable react/prop-types */
 import MovieList from "./movie_list/MovieList";
 import WatchedRelated from "./watched_related/WatchedRelated";
+import { MOVIE } from "../../interfaces";
 
-function Main({ movies }) {
+interface Iprops {
+  movies:MOVIE[]
+}
+function Main({ movies }:Iprops) {
+
   return (
     <main className="main">
       <MovieList movies={movies} />

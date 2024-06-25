@@ -1,5 +1,10 @@
-/* eslint-disable react/prop-types */
-function Movie({ movie }) {
+import { MOVIE } from "../../../interfaces";
+
+
+interface Iprops {
+  movie: MOVIE
+}
+function Movie({ movie }:Iprops) {
   return (
     <li>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />

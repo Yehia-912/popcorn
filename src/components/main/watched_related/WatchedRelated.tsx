@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { tempWatchedData } from "../../../data";
 import WatchedSummary from "./WatchedSummary";
 import WatchedMovieList from "./WatchedMovieList";
-import { tempWatchedData } from "../../../data";
 
 function WatchedRelated() {
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [watched, setWatched] = useState(tempWatchedData);
   const [isOpen2, setIsOpen2] = useState(true);
 

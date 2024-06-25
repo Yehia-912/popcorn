@@ -1,5 +1,8 @@
-/* eslint-disable react/prop-types */
-function WatchedMovie({ movie }) {
+import { WATCHEDMOVIE } from "../../../interfaces";
+interface Iprops {
+  movie:WATCHEDMOVIE
+}
+function WatchedMovie({ movie }:Iprops) {
   return (
     <li>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
