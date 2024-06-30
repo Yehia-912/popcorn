@@ -1,15 +1,15 @@
-import  { useState } from "react";
-
-function Search() {
-  const [query, setQuery] = useState("");
-
+interface Props {
+  query: string;
+  onSearch: (value: string) => void;
+}
+function Search({ query, onSearch }: Props) {
   return (
     <input
       className="search"
       type="text"
       placeholder="Search movies..."
       value={query}
-      onChange={(e) => setQuery(e.target.value)}
+      onChange={(e) => onSearch(e.target.value)}
     />
   );
 }

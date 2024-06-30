@@ -1,17 +1,15 @@
-import { MOVIE } from "../../interfaces";
+import { ReactNode } from "react";
 import Logo from "./Logo";
-import NumResult from "./NumResult";
-import Search from "./Search";
+
 
 interface Iprops {
-  movies:MOVIE[]
+  children: ReactNode
 }
-function Navbar({ movies }:Iprops) {
+function Navbar({ children }:Iprops) {
   return (
     <nav className="nav-bar">
       <Logo />
-      <Search />
-      <NumResult movies={movies} />
+      {children}
     </nav>
   );
 }

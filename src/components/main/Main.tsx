@@ -1,18 +1,10 @@
-import MovieList from "./movie_list/MovieList";
-import WatchedRelated from "./watched_related/WatchedRelated";
-import { MOVIE } from "../../interfaces";
+import { ReactNode } from "react";
 
 interface Iprops {
-  movies:MOVIE[]
+  children: ReactNode;
 }
-function Main({ movies }:Iprops) {
-
-  return (
-    <main className="main">
-      <MovieList movies={movies} />
-      <WatchedRelated />
-    </main>
-  );
+function Main({ children }: Iprops) {
+  return <main className="main">{children}</main>;
 }
 
 export default Main;
