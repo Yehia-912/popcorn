@@ -230,7 +230,7 @@ body {
 .summary div {
   display: flex;
   align-items: center;
-  gap: 2.4rem;
+  gap: 1.7rem;
   font-size: 1.6rem;
   font-weight: 600;
 }
@@ -238,7 +238,7 @@ body {
 .summary p {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.5rem;
 }
 
 /* ******* */
@@ -260,7 +260,8 @@ body {
 }
 
 .details img {
-  width: 33%;
+  width: 40%;
+  object-fit: cover;
 }
 
 .details-overview {

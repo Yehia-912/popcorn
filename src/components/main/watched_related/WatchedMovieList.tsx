@@ -6,7 +6,7 @@ import { WATCHEDMOVIE } from "../../../interfaces";
 }
 function WatchedMovieList({ watched }:Iprops) {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {watched?.map((movie) => (
         <WatchedMovie key={movie.imdbID} movie={movie} />
       ))}

@@ -11,21 +11,43 @@ import Loader from "./components/ui/Loader";
 import { tempMovieData, tempWatchedData } from "./data";
 import { useEffect, useState } from "react";
 import { handleFetching } from "./functions";
+import MovieDetails from "./components/movieDetails/MovieDetails";
+import { MOVIE, WATCHEDMOVIE } from "./interfaces";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState<MOVIE[]>(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
   const [query, setQuery] = useState("interstellar");
+  const [selected, setSelected] = useState("");
 
+  //Handlers
+  console.log(watched);
   const handleQuery = (value: string): void => setQuery(value);
+  const handleSelection = (id: string) =>
+    setSelected((prev) => (id == prev ? "" : id));
+  const handleDeSelect = () => setSelected("");
+  const handleAddToWatchList = (newMovie: WATCHEDMOVIE) =>
+    setWatched((prevState) =>
+      prevState.find((el) => el.imdbID === selected)?.imdbID
+        ? prevState.map((oldMovie) =>
+            oldMovie.imdbID === selected
+              ? oldMovie.userRating === newMovie.userRating
+                ? oldMovie
+                : newMovie
+              : oldMovie
+          )
+        : [...prevState, newMovie]
+    );
+  //Effects
   useEffect(() => {
-    handleFetching({
+    handleFetching<MOVIE[]>({
       query,
       setError,
       setIsLoading,
-      setMovies,
+      setQueryResult: setMovies,
+      withTitle: true,
     });
   }, [query]);
   return (
@@ -39,11 +61,23 @@ export default function App() {
           {/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
           {error && !isLoading && <Errors>{error} </Errors>}
           {isLoading && <Loader />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList onSelect={handleSelection} movies={movies} />
+          )}
         </Box>
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedMovieList watched={watched} />
+          {selected ? (
+            <MovieDetails
+              onAddToWatch={handleAddToWatchList}
+              onDeSelect={handleDeSelect}
+              selectedID={selected}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMovieList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>

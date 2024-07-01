@@ -18,7 +18,7 @@ function WatchedMovie({ movie }:Iprops) {
         </p>
         <p>
           <span>⏳</span>
-          <span>{movie.runtime} min</span>
+          <span>{movie.Runtime} min</span>
         </p>
       </div>
     </li>

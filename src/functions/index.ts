@@ -1,19 +1,29 @@
-import { FEATCHPARAMETARS } from "../interfaces";
-
-export const average = (arr: []) =>
+export const average = (arr: number[]) =>
   arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
 
-export const handleFetching = async ({
+/**
+ * @desc featching movie with shord properties
+ * @param  {query,setError,setIsLoading,setMovies} - movie title - error setter - loading setter - movies setter
+ */
+export async function handleFetching<T>({
   query,
   setError,
   setIsLoading,
-  setMovies,
-}: FEATCHPARAMETARS) => {
+  setQueryResult,
+  withTitle,
+}: {
+  query: string;
+  setIsLoading: (val: boolean) => void;
+  setError: (val: string) => void;
+  setQueryResult: (val: T) => void;
+  withTitle: boolean;
+}) {
   try {
     setIsLoading(true);
     //fetch
+    const queringMehtod = withTitle ? "s" : "i";
     const response = await fetch(
-      `http://www.omdbapi.com/?apikey=f84fc31d&s=${query}`
+      `http://www.omdbapi.com/?${queringMehtod}=${query}&apikey=db1f2b72`
     );
     //throw an error
     if (!response.ok) throw new Error("⛔ Error in fetching movie");
@@ -23,10 +33,10 @@ export const handleFetching = async ({
     if (data.Response === "False") throw new Error("⚠️ Can't find the movie");
     else setError("");
 
-    setMovies(data.Search);
+    setQueryResult(withTitle ? data.Search : data);
   } catch (err: unknown) {
     if (err instanceof Error) setError(err.message);
   } finally {
     setIsLoading(false);
   }
-};
+}

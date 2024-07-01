@@ -1,18 +1,19 @@
 import { MOVIE } from "../../../interfaces";
 
-
 interface Iprops {
-  movie: MOVIE
+  movie: MOVIE;
+  onSelect: (val: string) => void;
 }
-function Movie({ movie }:Iprops) {
+function Movie({ onSelect, movie }: Iprops) {
+  const { Poster, Title, Year, imdbID } = movie;
   return (
-    <li>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+    <li onClick={() => onSelect(imdbID)}>
+      <img src={Poster} alt={`${Title} poster`} />
+      <h3>{Title}</h3>
       <div>
         <p>
           <span>🗓</span>
-          <span>{movie.Year}</span>
+          <span>{Year}</span>
         </p>
       </div>
     </li>
