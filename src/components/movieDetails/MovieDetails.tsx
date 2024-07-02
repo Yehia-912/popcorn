@@ -44,7 +44,6 @@ function MovieDetails({ onAddToWatch, onDeSelect, selectedID }: Props) {
     onAddToWatch(newWatchedMovie);
     onDeSelect();
   };
-
   const newWatchedMovie: WATCHEDMOVIE = {
     imdbID,
     imdbRating: Number(imdbRating),
@@ -64,6 +63,24 @@ function MovieDetails({ onAddToWatch, onDeSelect, selectedID }: Props) {
       withTitle: false,
     });
   }, [selectedID]);
+
+  useEffect(
+    function (): () => void {
+      Title ? (document.title = `Moive | ${Title}`) : null;
+
+      return () => (document.title = "usePopcorn");
+    },
+    [Title]
+  );
+
+  useEffect(() => {
+    const callBack = (e: KeyboardEvent) => {
+      e.code === "Escape" ? onDeSelect() : null;
+    };
+    document.addEventListener("keydown", callBack);
+
+    return () => document.removeEventListener("keydown", callBack);
+  }, [onDeSelect]);
 
   return (
     <div className="details">

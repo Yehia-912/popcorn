@@ -10,6 +10,7 @@ export async function handleFetching<T>({
   setError,
   setIsLoading,
   setQueryResult,
+  controller,
   withTitle,
 }: {
   query: string;
@@ -17,13 +18,15 @@ export async function handleFetching<T>({
   setError: (val: string) => void;
   setQueryResult: (val: T) => void;
   withTitle: boolean;
+  controller?: AbortController;
 }) {
   try {
     setIsLoading(true);
     //fetch
     const queringMehtod = withTitle ? "s" : "i";
     const response = await fetch(
-      `http://www.omdbapi.com/?${queringMehtod}=${query}&apikey=db1f2b72`
+      `http://www.omdbapi.com/?${queringMehtod}=${query}&apikey=db1f2b72`,
+      { signal: controller?.signal }
     );
     //throw an error
     if (!response.ok) throw new Error("⛔ Error in fetching movie");
@@ -35,7 +38,8 @@ export async function handleFetching<T>({
 
     setQueryResult(withTitle ? data.Search : data);
   } catch (err: unknown) {
-    if (err instanceof Error) setError(err.message);
+    if (err instanceof Error)
+      err.name !== "AbortError" ? setError(err.message) : null;
   } finally {
     setIsLoading(false);
   }

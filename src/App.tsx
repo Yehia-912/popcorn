@@ -19,18 +19,28 @@ export default function App() {
   const [error, setError] = useState("");
   const [movies, setMovies] = useState<MOVIE[]>(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
-  const [query, setQuery] = useState("interstellar");
+  const [query, setQuery] = useState("Naruto");
   const [selected, setSelected] = useState("");
 
   //Handlers
-  console.log(watched);
+  /**
+   * @param query just get movie name from search bar
+   */
   const handleQuery = (value: string): void => setQuery(value);
+  /**
+   * @param id get movie id and set the state
+   */
   const handleSelection = (id: string) =>
     setSelected((prev) => (id == prev ? "" : id));
+  /**
+   * desc close Movies details - no params
+   * @returns void
+   */
   const handleDeSelect = () => setSelected("");
+
   const handleAddToWatchList = (newMovie: WATCHEDMOVIE) =>
     setWatched((prevState) =>
-      prevState.find((el) => el.imdbID === selected)?.imdbID
+      prevState.some((el) => el.imdbID === selected)
         ? prevState.map((oldMovie) =>
             oldMovie.imdbID === selected
               ? oldMovie.userRating === newMovie.userRating
@@ -41,15 +51,21 @@ export default function App() {
         : [...prevState, newMovie]
     );
   //Effects
+
   useEffect(() => {
+    const controller = new AbortController();
     handleFetching<MOVIE[]>({
       query,
       setError,
+      controller,
       setIsLoading,
       setQueryResult: setMovies,
       withTitle: true,
     });
+    return () => controller.abort();
   }, [query]);
+
+
   return (
     <>
       <Navbar>

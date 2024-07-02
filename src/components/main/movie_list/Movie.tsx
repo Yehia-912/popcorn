@@ -6,7 +6,9 @@ interface Iprops {
 }
 function Movie({ onSelect, movie }: Iprops) {
   const { Poster, Title, Year, imdbID } = movie;
-  return (
+
+  
+    return (
     <li onClick={() => onSelect(imdbID)}>
       <img src={Poster} alt={`${Title} poster`} />
       <h3>{Title}</h3>
