@@ -13,6 +13,8 @@ export interface WATCHEDMOVIE {
   Runtime: number;
   imdbRating: number;
   userRating: number;
+
+  userDecisionNumber?: number;
 }
 export interface FEATCHPARAMETARS {
   query: string;

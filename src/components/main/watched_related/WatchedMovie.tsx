@@ -1,8 +1,9 @@
 import { WATCHEDMOVIE } from "../../../interfaces";
 interface Iprops {
-  movie:WATCHEDMOVIE
+  movie: WATCHEDMOVIE;
+  onDelete: (val: string) => void;
 }
-function WatchedMovie({ movie }:Iprops) {
+function WatchedMovie({ onDelete, movie }: Iprops) {
   return (
     <li>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
@@ -20,6 +21,9 @@ function WatchedMovie({ movie }:Iprops) {
           <span>⏳</span>
           <span>{movie.Runtime} min</span>
         </p>
+        <button className="btn-delete" onClick={() => onDelete(movie.imdbID)}>
+          x
+        </button>
       </div>
     </li>
   );

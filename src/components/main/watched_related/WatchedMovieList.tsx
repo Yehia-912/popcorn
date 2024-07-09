@@ -1,14 +1,15 @@
 import WatchedMovie from "./WatchedMovie";
 import { WATCHEDMOVIE } from "../../../interfaces";
 
- interface Iprops  {
-  watched: WATCHEDMOVIE[]
+interface Iprops {
+  watched: WATCHEDMOVIE[];
+  onDelete: (val: string) => void;
 }
-function WatchedMovieList({ watched }:Iprops) {
+function WatchedMovieList({ onDelete, watched }: Iprops) {
   return (
     <ul className="list list-movies">
       {watched?.map((movie) => (
-        <WatchedMovie key={movie.imdbID} movie={movie} />
+        <WatchedMovie onDelete={onDelete} key={movie.imdbID} movie={movie} />
       ))}
     </ul>
   );

@@ -24,8 +24,9 @@ export async function handleFetching<T>({
     setIsLoading(true);
     //fetch
     const queringMehtod = withTitle ? "s" : "i";
+    const trimedQuery = query.trim();
     const response = await fetch(
-      `http://www.omdbapi.com/?${queringMehtod}=${query}&apikey=db1f2b72`,
+      `http://www.omdbapi.com/?${queringMehtod}=${trimedQuery}&apikey=db1f2b72`,
       { signal: controller?.signal }
     );
     //throw an error

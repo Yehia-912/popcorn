@@ -8,7 +8,6 @@ import NumResult from "./components/navbar/NumResult";
 import Search from "./components/navbar/Search";
 import Errors from "./components/ui/Errors";
 import Loader from "./components/ui/Loader";
-import { tempMovieData, tempWatchedData } from "./data";
 import { useEffect, useState } from "react";
 import { handleFetching } from "./functions";
 import MovieDetails from "./components/movieDetails/MovieDetails";
@@ -17,9 +16,12 @@ import { MOVIE, WATCHEDMOVIE } from "./interfaces";
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [movies, setMovies] = useState<MOVIE[]>(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
-  const [query, setQuery] = useState("Naruto");
+  const [movies, setMovies] = useState<MOVIE[]>();
+  const [watched, setWatched] = useState(() => {
+    const initial = JSON.parse(localStorage.getItem("watched")!);
+    return initial;
+  });
+  const [query, setQuery] = useState("");
   const [selected, setSelected] = useState("");
 
   //Handlers
@@ -50,6 +52,11 @@ export default function App() {
           )
         : [...prevState, newMovie]
     );
+
+  const handleRemoveFromWatchedList = (id: string) => {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  };
+
   //Effects
 
   useEffect(() => {
@@ -65,6 +72,9 @@ export default function App() {
     return () => controller.abort();
   }, [query]);
 
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify(watched));
+  }, [watched]);
 
   return (
     <>
@@ -75,7 +85,9 @@ export default function App() {
       <Main>
         <Box>
           {/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
-          {error && !isLoading && <Errors>{error} </Errors>}
+          {error && !isLoading && query.trim() && query.trim().length > 2 && (
+            <Errors>{error} </Errors>
+          )}
           {isLoading && <Loader />}
           {!isLoading && !error && (
             <MovieList onSelect={handleSelection} movies={movies} />
@@ -91,7 +103,10 @@ export default function App() {
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMovieList watched={watched} />
+              <WatchedMovieList
+                onDelete={handleRemoveFromWatchedList}
+                watched={watched}
+              />
             </>
           )}
         </Box>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { WATCHEDMOVIE, fullMovieDetails } from "../../interfaces";
 import { initfullDetails } from "../../data";
 import Header from "./Header";
@@ -22,6 +22,8 @@ function MovieDetails({ onAddToWatch, onDeSelect, selectedID }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [userRating, setUserRating] = useState(0);
+
+  const numberOfRateDesicion = useRef(0);
   //  Destructure
 
   const {
@@ -41,17 +43,18 @@ function MovieDetails({ onAddToWatch, onDeSelect, selectedID }: Props) {
   //Handlers
   const handleSetRating = (rate: number) => setUserRating(rate);
   const handleAdd = () => {
+    const newWatchedMovie: WATCHEDMOVIE = {
+      imdbID,
+      imdbRating: Number(imdbRating),
+      Poster,
+      Runtime: Number(Runtime.split(" ")[0]),
+      Title,
+      userRating,
+      Year,
+      userDecisionNumber: numberOfRateDesicion.current,
+    };
     onAddToWatch(newWatchedMovie);
     onDeSelect();
-  };
-  const newWatchedMovie: WATCHEDMOVIE = {
-    imdbID,
-    imdbRating: Number(imdbRating),
-    Poster,
-    Runtime: Number(Runtime.split(" ")[0]),
-    Title,
-    userRating,
-    Year,
   };
 
   useEffect(() => {
@@ -82,6 +85,10 @@ function MovieDetails({ onAddToWatch, onDeSelect, selectedID }: Props) {
     return () => document.removeEventListener("keydown", callBack);
   }, [onDeSelect]);
 
+  useEffect(() => {
+    if (userRating)
+      numberOfRateDesicion.current = numberOfRateDesicion.current + 1;
+  }, [userRating]);
   return (
     <div className="details">
       {error && !isLoading && <Error>{error}</Error>}
