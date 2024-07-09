@@ -4,10 +4,10 @@ import { initfullDetails } from "../../data";
 import Header from "./Header";
 import MovieDesc from "./MovieDesc";
 import Loader from "../ui/Loader";
-import { handleFetching } from "../../functions";
 import Error from "../ui/Errors";
 import StartRating from "../ui/StartRating";
 import Button from "../ui/Button";
+import { useFetch } from "../../custom";
 
 interface Props {
   onDeSelect: () => void;
@@ -18,11 +18,12 @@ interface Props {
 function MovieDetails({ onAddToWatch, onDeSelect, selectedID }: Props) {
   const [movieFullDetails, setMovieFullDetails] =
     useState<fullMovieDetails>(initfullDetails);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
+  useFetch;
   const [userRating, setUserRating] = useState(0);
-
+  const { error, isLoading } = useFetch<fullMovieDetails>(
+    selectedID + "i",
+    setMovieFullDetails
+  );
   const numberOfRateDesicion = useRef(0);
   //  Destructure
 
@@ -56,16 +57,6 @@ function MovieDetails({ onAddToWatch, onDeSelect, selectedID }: Props) {
     onAddToWatch(newWatchedMovie);
     onDeSelect();
   };
-
-  useEffect(() => {
-    handleFetching<fullMovieDetails>({
-      query: selectedID,
-      setError,
-      setIsLoading,
-      setQueryResult: setMovieFullDetails,
-      withTitle: false,
-    });
-  }, [selectedID]);
 
   useEffect(
     function (): () => void {

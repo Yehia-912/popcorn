@@ -9,20 +9,25 @@ import Search from "./components/navbar/Search";
 import Errors from "./components/ui/Errors";
 import Loader from "./components/ui/Loader";
 import { useEffect, useState } from "react";
-import { handleFetching } from "./functions";
+// import { handleFetching } from "./functions";
 import MovieDetails from "./components/movieDetails/MovieDetails";
 import { MOVIE, WATCHEDMOVIE } from "./interfaces";
+import { useFetch } from "./custom";
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [movies, setMovies] = useState<MOVIE[]>();
   const [watched, setWatched] = useState(() => {
     const initial = JSON.parse(localStorage.getItem("watched")!);
     return initial;
   });
   const [query, setQuery] = useState("");
+  const [movies, setMovies] = useState<MOVIE[]>();
+
   const [selected, setSelected] = useState("");
+  const { isLoading, error } = useFetch<MOVIE[]>(
+    query + "s",
+    setMovies,
+    handleDeSelect
+  );
 
   //Handlers
   /**
@@ -38,7 +43,9 @@ export default function App() {
    * desc close Movies details - no params
    * @returns void
    */
-  const handleDeSelect = () => setSelected("");
+  function handleDeSelect() {
+    setSelected("");
+  }
 
   const handleAddToWatchList = (newMovie: WATCHEDMOVIE) =>
     setWatched((prevState) =>
@@ -58,19 +65,6 @@ export default function App() {
   };
 
   //Effects
-
-  useEffect(() => {
-    const controller = new AbortController();
-    handleFetching<MOVIE[]>({
-      query,
-      setError,
-      controller,
-      setIsLoading,
-      setQueryResult: setMovies,
-      withTitle: true,
-    });
-    return () => controller.abort();
-  }, [query]);
 
   useEffect(() => {
     localStorage.setItem("watched", JSON.stringify(watched));
